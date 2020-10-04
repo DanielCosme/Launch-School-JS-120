@@ -1,0 +1,23 @@
+{
+  "name": "Launch-School-JS-120",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DanielCosme/Launch-School-JS-120.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/DanielCosme/Launch-School-JS-120/issues"
+  },
+  "homepage": "https://github.com/DanielCosme/Launch-School-JS-120#readme",
+  "dependencies": {
+    "readline-sync": "^1.4.10"
+  }
+}
