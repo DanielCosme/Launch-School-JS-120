@@ -1,37 +1,36 @@
-// Use a factory function to create pet objects. The factory should let us create and use pets like this:
-
-let pudding = createPet("Cat", "Pudding");
-console.log(`I am a ${pudding.animal}. My name is ${pudding.name}.`);
-pudding.sleep(); // I am sleeping
-pudding.wake();  // I am awake
-
-let neptune = createPet("Fish", "Neptune");
-console.log(`I am a ${neptune.animal}. My name is ${neptune.name}.`);
-neptune.sleep(); // I am sleeping
-neptune.wake();  // I am awake
-neptune.animal = 'yes';
-console.log(`I am a ${neptune.animal}. My name is ${neptune.name}.`);
-
-
-function createPet(anim, name) {
-  function sleep() {
-    console.log('I am sleeping');
+const Speed = {
+  goFast() {
+    console.log(`I'm a ${this.constructor.name} and going super fast!`);
   }
+};
 
-  function wake() {
-    console.log('I am awake')
-  }
-
-  const animal = anim;
-
-  return {
-    sleep,
-    wake,
-    animal,
-    name,
+class Car {
+  goSlow() {
+    console.log(`I'm safe and driving slow.`);
   }
 }
 
+Object.assign(Car.prototype, Speed);
 
+class Truck {
+  goVerySlow() {
+    console.log(`I'm a heavy truck and like going very slow.`);
+  }
+}
 
+function can(vehicle) {
+  if ('goFast' in vehicle) {
+    vehicle.goFast();
+  } else {
+    console.log(vehicle.constructor.name + ' cannot go fast');
+  }
+}
+
+// make a vehicle go fast.
+ 
+let car = new Car();
+let truck = new Truck();
+
+can(car);
+can(truck);
 
