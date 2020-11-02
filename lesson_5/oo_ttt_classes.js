@@ -84,8 +84,7 @@ class Human extends Player {
       const prompt = `Choose a square (${validChoices.join(", ")}): `;
       choice = readline.question(prompt);
 
-      let integerVal = parseInt(choice, 10);
-      if (validChoices.includes(integerVal)) {
+      if (validChoices.includes(choice)) {
         break;
       }
 
@@ -129,17 +128,9 @@ class TTTGame {
   ];
 
 
-  init() { /* reset the board and scores if any */ }
-
   displayGreeting() { console.log('Welcome to the game.', '\n') }
 
   displayFarewell() { console.log('Thanks for playing, bye.') }
-
-  displayState() {
-    // show game score and other info, like a header
-  }
-
-  displayBoard() { /* draw board to stdout */ }
 
   gameOver() { return this.boardIsFull() || this.someoneWon() }
 
@@ -183,7 +174,6 @@ class TTTGame {
   }
 
   play() {
-    this.init();
     this.displayGreeting();
     while (true) {
 
