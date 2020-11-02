@@ -76,13 +76,26 @@ class Human extends Player {
     super(marker);
   }
 
+  joinOr(strArr, div = ',', word = 'or') {
+    let res = '(';
+    let space = " ";
+    strArr.forEach((str, idx) => {
+      if (idx === strArr.length -1) {
+        if (strArr.length < 2) {res += str + ") ";}
+        else res += word + space + str + ") ";
+      } else {
+        res += str + div + space;
+      }
+    })
+    return res;
+  }
+
   move(board) {
     let choice;
 
     while (true) {
       let validChoices = board.unUsedSquares();
-      const prompt = `Choose a square (${validChoices.join(", ")}): `;
-      choice = readline.question(prompt);
+      choice = readline.question(this.joinOr(validChoices));
 
       if (validChoices.includes(choice)) {
         break;
