@@ -69,7 +69,7 @@ class Player {
   }
 
   getMarker() { return this.marker }
-}
+
 
 class Human extends Player {
   constructor(marker) {
