@@ -13,8 +13,8 @@ behavior. Objects are usually represented or modeled after real world entities (
 
 Generally speaking an Object is an instance of a Class. A class is the blueprint that is used
 to instantiate Objects, however different languages have different implementations in terms of
-object creation and/or instantiation.
-
+object creation and/or instantiation. In JavaScript Objects inherit desired states and behavior
+from other objects as opposed to classes.
 
 #### Meaning of the concept in the context of JavaScript
 
@@ -24,7 +24,7 @@ They are first and foremost data structures that hold `{key, value}` pairs, wher
 always `strings` and the **values** can be of any type/value.
 
 JavaScript builds on top of this data structure in order to be able to write object oriented 
-programs. JS does this by adding some characteristics, functionality and specific methods in 
+programs and create more sophisticated data types. JS does this by adding some characteristics, functionality and specific methods in 
 `Object.prototype` in order to allow programmers to write object oriented programs.
 
 An example of how to create an object in JavaScript:
@@ -33,6 +33,9 @@ An example of how to create an object in JavaScript:
 const obj = {}; 
 const obj2 = new Object(); // created using the new keyword
 console.log(obj, obj2);
+const obj3 = Object.create({}); // 
+// const obj4 = factoryFunction()
+// const obj5 = Object.create({}).init(); // OLOO
 ```
 #### Object Factories 
 Functions that have the specific purpose of creating other objects. This functions
@@ -42,12 +45,12 @@ return objects, and take as input the desired state. They are part of **Object C
 The problem they solve is the creation of objects that are the same type, by type
 I mean objects with the same state and behavior. 
 
-Also of course code reuse.
+Also of course *code reuse*.
 
 **Con:**
 All objects created by the factory will have their behaviors (methods) duplicated in memory,
 creating code duplication in memory. This happens because each object will have its own version
-of the method, this is wasteful in terms of memory consumption.
+of the method, this is wasteful in terms of memory utilization.
 
 Other con is the fact that there is no way of relating objects created by the same factory. It is 
 not possible to determine the type of the object after its instantiation.
@@ -63,15 +66,16 @@ const person = function(name, location) {
     getInfo,
   } 
 }
-let fac = person('Daniel', 'Montreal');
+let per1 = person('Daniel', 'Montreal');
+let per2 = person('Laura', 'Bogota');
 fac.getInfo();
+fac2.getInfo();
 ```
 #### Constructors
 A special type of function whose purpose is the creation of objects. It has several differences
 with the object factories.
 
-First of all, a constructor function is invoked using the `new` keyword, and is expected to return
-and object from the function. They are capitalized by convention. Example:
+First of all, a constructor function is invoked using the `new` keyword, and its expected to return and object from the function. They are capitalized by convention. Example:
 ```javascript
 let arr = new Array(); // Array is the constructor.
 ```
@@ -88,7 +92,7 @@ function Person(name) {
 
 let dan = new Person('Daniel');
 console.log('Is daniel a (of type) person?', dan instanceof Person); // true
-console.log('Is daniel a person?', Person.prototype.constructor === Person); // true
+console.log('Is daniel a person?', Object.GetPrototypeof(dan).constructor === Person); // true
 ```
 **Characteristics**
 - you can explicitly return an object form a constructor.
@@ -104,7 +108,8 @@ Prototypes serve as the cornerstone of implementing inheritance in JavaScript.
 - They way to access this property is by using `Object.getPrototypeOf()`.
 - Relations in the protorypal chain can be cheeked using `Object.isPrototypeOf()`;
 - Objects can be assigned its prototype at creation by `Object.create()`
-- Objects be default will have `Object.prototype` as their prototype.
+- Objects by default will have `Object.prototype` as their prototype.
+- Prototypes can be assigned manually via `Object.setProtorypeOf()`.
 
 Looking up a property in the prototype chain is the basis for prototypal inheritance, or property sharing through the prototype chain. Objects lower down in the chain inherit properties and behaviors from objects in the chain above. That is, downstream objects can delegate properties or behaviors to upstream objects.
 
@@ -123,14 +128,103 @@ Object.getOwnPropertyNames(obj);
 
 ### OLOO
 **Object Creation pattern**
-Refers to objects linking to other objects.
+Refers to objects linking to other objects. Is a object creation pattern in which objects are  
+created from a prototype Object, meaning objects from the same type will now delegate method 
+invocation to their prototype and if not possible up into to prototypal chain.
+
+This pattern improves upon the factory method in terms of performance, now each new object will have
+unique state but shared behavior via their prototype.
+
+In this pattern, inheritance relations between objects are manually assigned with the `Object.create()`
+method at the time of instantiation.
+
+**Characteristics**
+
+- The way that state is initialized is with a `init()` method, that is called at 
+  creation after using `Object.create()`.
+- The init method, must return the invoking object, otherwise It will loose its 
+  handle, it will get garbage collected and it will not be saved into a variable as expected.
+- This pattern creation solves the problem of code reuse and memory efficiency by method delegation to a prototype.
+- Each time inheritance is to be implemented via OLOO the method `Objec.setPrototypeOf()` can be used to create a prototypal chain.
+- The way to check for relations in the prototypal chain is by using the instance method`obj.isPrototypeOf()`.
 
 ```javascript
+const Person = {
+  init(name, location, gender) {
+    this.name = name;
+    this.location = location;
+    this.gender = gender;
+    return this;
+  },
+
+  show() { console.log(`My name is ${this.name}, and I live in ${this.location}.`)},
+  gender() { console.log('My gender is:', this.gender)},
+}
+
+const Male = {
+  init(name, location) {
+    Person.init.call(name, location, 'Male');
+  }
+}
+Object.setPrototypeOf(Male, Person);
+
+let daniel = Object.create(Male).init('Daniel', 'Montreal');
+daniel.show();
+daniel.gender();
+
+let lau = Object.create(Person).init('lau', 'Laval', 'Female');
+lau.show();
+daniel.gender();
+```
+
+### ES6 classes
+
+ES6 classes are nothing more than syntactical sugar added on top of the prototypal inheritance
+pattern based on constructors and prototypes.
+
+Underneath the hood they act in the same fashion. The main objective of ES6 Classes is to provide
+easier transition for programmers coming from Object Oriented languages like Java or C# by making
+the syntax more familiar.
+
+Their only difference is that of syntax. 
+
+- The `class` keyword is added in replacement of a constructor function definition.
+This is how a class is defined `class Person {}`.
+- Inside the body of the class (the brackets) there is an instance method called `constructor`, this
+constructor will hold all of the state initialization code, if the class is a sub-type/sub-class, the
+parent constructor need to be called with the keyword `super()`, this will call the parent constructor, it needs to be the first line in the constructor method.
+- On the rest of the body the desired behavior will be implemented, parent methods can be overridden, and some of them **must** in order to provide functionality, like for example: `toStrig()`, this method by default will give no meaningful information of Objects.
+- Inheritance is implemented by the keyword `extend` which you use when you want to establish a 
+prototypal relationship with two "classes".
+
+
+```javascript
+class Person {
+  constructor(name, location, gender) {
+    this.name = name;
+    this.location = location;
+    this.gender = gender;
+  }
+
+  info() {
+    console.log(`My name is ${this.name}, I live in ${this.location} and I am a ${this.gender}`);
+  }
+}
+
+class Male extends Person {
+  constructor(name, location) {
+    super(name, location, 'Male');
+  }
+}
+
+let daniel = new Male('Daniel', 'Montreal');
+let lau = new Person('Lau', 'Laval' , 'Female');
+daniel.info();
+lau.info();
 
 ```
 Execution context **resolves** to something, always.
 
-ES6 classes
 
 ## List
 
