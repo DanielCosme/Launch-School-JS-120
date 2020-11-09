@@ -223,13 +223,61 @@ daniel.info();
 lau.info();
 
 ```
-Execution context **resolves** to something, always.
+
+### Methods and properties
+
+The topic of methods and properties pertain on how they behave are accessed and defined in objects. 
+In the context of JavaScript this is very important when writing Object Oriented programs due to 
+the several ways that exist in the language to write OO code.
+
+There are two types of members that can be used with objects:
+- Instance members
+- Static members
+
+In generic terms **instance members** (methods & properties) of an object are ones that can be accessed
+or invoked directly by the object itself, like for example:
+
+```javascript
+let arr = [1, 2];
+arr.push(3); // instance method.
+console.log(arr);
+```
+The `push` *instance* method of `arr` is invoked from the array object. An instance property can be
+accessed in the same fashion like so `arr.length`, returning the length property of the array. 
+Members up in the prototypal chain are also considered instance members, even if there is method
+delegation. *Instance* properties are always those that are unique to the object they belong to.
+generally speaking instance methods are those who in some way might change the state of the object.
+
+**Static* members of an object are very specific to the pseudo-classical approach to writing OO code.
+Static members are those whose state is common for all instances of that particular object at all times.
+They are accessed and invoked by referencing the constructor/class directly, for example:
+```javascript 
+Array.isArray(); // static method.
+```
+Generally speaking static methods are those who don't mutate the state of the object.
+
+
+### Prototypal and pseudo-classical inheritance 
+Before talking about the two different methods of implementing inheritance in JS is 
+important to talk about inheritance as a concept, separated from the JavaScript context.
+
+*Inheritance* is one of the 3 pillars of Object Oriented Programming. There are two main 
+objectives of inheritance:
+- Code reuse
+- Extensibility
+
+Inheritance is a pattern that allows for the creation of types that share code and behavior among
+them, this creates a hierarchy or chain of relations between them. The process of a type inheriting 
+state and behavior form another is called sub-typing. Not only types can inherit form other types,
+they can modify or enhance to their behavior by adding their own and overriding current ones.
+
+#### Prototypal
+
+#### Pseudo-classical
 
 
 ## List
 
-Methods and properties; instance and static methods and properties
-Prototypal and pseudo-classical inheritance
 Encapsulation
 Polymorphism
 Collaborator objects
@@ -240,6 +288,7 @@ Higher-order functions
 The global object
 Method and property lookup sequence
 Function execution context and this
+    Execution context **resolves** to something, always.
 Implicit and explicit execution context
 Dealing with context loss
 call, apply, and bind
