@@ -1,4 +1,4 @@
-# JS-129 Written assessment Doc
+# pJS-129 Written assessment Doc
 
 # Top level: Object Oriented Programming
 
@@ -628,12 +628,32 @@ Is an Object static method that copies the own properties of an Object to anothe
 ### Object.create
 Is an Object static method that creates a new object and sets is prototype to the object received as
 argument by it.
-### Built-in constructors like Array, Object, String and Number
+### Built-in constructors 
+We are going to explore the behaviors of the built in constructors when invoked with and
+without the `new` keyword.
+#### Array
+Array is one of the fundamental data structures in JavaScript.
+Array is also an function object and that means it is a constructor, so we can do the following:
+```javascript
+let arr = new Array(); // []
+let arr2 = Array(); // []
+```
+Both function invocations will return a new array no matter if they where invoked with or without
+the `new` keyword.
+#### Object 
+When an object is called with a non-constructor context it will behave exactly as if it would've
+been called with the `new` keyword.
+#### String 
+When called with constructor context it will return an Object, a wrapper.
+When called without constructo contect it will convert the input into a string, thus, returning a 
+string (primitive type).
+#### Number
+For numbers it works in the same way as for Strings.
 ### Reading OO code
 
 ### How is the term variable used
 #### Why are the following treated as variables
-- Variables delcared with `let`, `const`.
+- Variables declared with `let`, `const`.
 - Function parameters.
 - Function names.
 - Class names.

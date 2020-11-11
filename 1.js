@@ -1,4 +1,12 @@
-let arr = [1,2];
-let arr2 = [3,4];
-let arr3 = arr.concat(arr2);
-console.log(arr3)
+function func() {
+  (function() {
+    console.log(this.name);
+  }).apply(this);
+}
+
+let obj = { 
+  name: 'Daniel',
+  greet: 
+};
+
+obj.greet();
